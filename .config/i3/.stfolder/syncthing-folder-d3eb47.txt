@@ -1,0 +1,5 @@
+# This directory is a Syncthing folder marker.
+# Do not delete.
+
+folderID: 3fexx-ppjlj
+created: 2025-03-01T14:30:34+01:00

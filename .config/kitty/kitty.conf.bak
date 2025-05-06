@@ -1,0 +1,4 @@
+include ./theme.conf
+#background_opacity 0.5
+#blur_background yes
+font_family MesloLGS NF
