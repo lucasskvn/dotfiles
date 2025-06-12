@@ -123,3 +123,13 @@ export NVM_DIR="$HOME/.nvm"
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 export PATH=$PATH:/home/lucasskvn/.spicetify
+
+# Définir un widget qui exécute 'fg'
+function fg-widget() {
+  fg
+  zle reset-prompt
+}
+zle -N fg-widget
+
+# Associer CTRL+F au widget (CTRL+F = ^F)
+bindkey '^F' fg-widget
