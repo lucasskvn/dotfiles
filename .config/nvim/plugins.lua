@@ -1,0 +1,23 @@
+return {
+    require("plugins.treesitter"),
+    require("plugins.snacks"),
+    require("plugins.mason"),
+    require("plugins.telescope"),
+    require("plugins.nvim-cmp"),
+    require("plugins.lualine"),
+    require("plugins.cyberdream"),
+    require("plugins.oxocarbon"),
+    require("plugins.dracula"),
+    require("plugins.ayu-vim"),
+    require("plugins.moonfly"),
+    require("plugins.nvim-tree"),
+    require("plugins.vscode-colors"),
+    -- require("plugins.noice"), -- NAH
+    require("plugins.harpoon"),
+    require("plugins.lspconfig"),
+    require("plugins.luasnip"),
+    require("plugins.autopairs"),
+    require("plugins.copilot-chat"),
+    require("plugins.undotree"),
+    require("plugins.orgmode"),
+}
