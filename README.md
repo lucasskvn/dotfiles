@@ -2,24 +2,24 @@
 
 <div align="center">
   <img src="https://img.shields.io/badge/Zsh-Yes-green?style=for-the-badge&logo=zsh&logoColor=white" alt="Zsh">
-  <img src="https://img.shields.io/badge/NixOS-Yes-blue?style=for-the-badge&logo=nixos&logoColor=white" alt="NixOS">
   <img src="https://img.shields.io/badge/Neovim-Yes-green?style=for-the-badge&logo=neovim&logoColor=white" alt="Neovim">
+  <img src="https://img.shields.io/badge/OXWM-Yes-blue?style=for-the-badge&logo=linux&logoColor=white" alt="OXWM">
+  <img src="https://img.shields.io/badge/Kitty-Yes-green?style=for-the-badge&logo=kitty&logoColor=white" alt="Kitty">
 </div>
 
 <br>
 
-Mes dotfiles personnels pour un environnement de développement productif et esthétique. Configuration complète pour **Zsh**, **Neovim**, **Hyprland** et bien plus.
+Mes dotfiles personnels pour un environnement de développement productif et esthétique. Configuration complète pour **Zsh**, **Neovim**, **OXWM** et **Kitty**.
 
 ---
 
 ## ✨ Fonctionnalités
 
-- 🐚 **Zsh** — Shell configuré avec Oh My Zsh et plugins
-- 📝 **Neovim** — Éditeur configuré avec LSP et plugins
-- 🖥️ **Hyprland** — Environnement de bureau Wayland
-- 🎨 **Thèmes** — Thèmes cohérents pour tous les outils
-- 🔧 **Alias** — Raccourcis pour les commandes fréquentes
-- 📦 **Scripts** — Scripts utilitaires pour le quotidien
+- 🐚 **Zsh** — Shell configuré avec Oh My Zsh, autosuggestions et syntax highlighting
+- 📝 **Neovim** — Éditeur configuré avec LSP, Treesitter et une vingtaine de plugins
+- 🪟 **OXWM** — Gestionnaire de fenêtres X11 dynamique
+- 🖥️ **Kitty** — Terminal GPU-accéléré avec thème Gruvbox
+- 🎨 **Thèmes** — Palette cohérente Gruvbox dans tous les outils
 
 ---
 
@@ -27,8 +27,9 @@ Mes dotfiles personnels pour un environnement de développement productif et est
 
 ### Prérequis
 
-- Linux (NixOS recommandé)
+- Linux
 - Git
+- GNU Stow (recommandé)
 
 ### Installation avec GNU Stow
 
@@ -40,9 +41,8 @@ cd ~/dotfiles
 # Installer les dotfiles avec stow
 stow zsh
 stow nvim
-stow hyprland
+stow oxwm
 stow kitty
-stow waybar
 ```
 
 ### Installation manuelle
@@ -54,7 +54,7 @@ cd ~/dotfiles
 
 # Copier les fichiers de configuration
 cp .zshrc ~/
-cp -r .config ~/
+cp -r .config/* ~/.config/
 ```
 
 ---
@@ -65,18 +65,17 @@ cp -r .config ~/
 dotfiles/
 ├── .zshrc                 # Configuration Zsh
 ├── .config/
+│   ├── kitty/             # Configuration Kitty
+│   │   ├── kitty.conf
+│   │   └── theme.conf     # Thème Gruvbox
 │   ├── nvim/              # Configuration Neovim
 │   │   ├── init.lua
-│   │   ├── lua/
-│   │   └── plugin/
-│   ├── hyprland/          # Configuration Hyprland
-│   │   ├── hyprland.conf
-│   │   └── monitors.conf
-│   ├── kitty/             # Configuration Kitty
-│   │   └── kitty.conf
-│   ├── waybar/            # Configuration Waybar
-│   │   └── config
-│   └── ...
+│   │   ├── plugins.lua
+│   │   ├── lazy-lock.json
+│   │   ├── lua/config/    # Configs générales
+│   │   └── lua/plugins/   # Configs des plugins
+│   └── oxwm/              # Configuration OXWM
+│       └── config.lua
 └── README.md
 ```
 
@@ -84,33 +83,18 @@ dotfiles/
 
 ## 🐚 Zsh
 
-### Plugins installés
+### Plugins
 
-- **zsh-autosuggestions** — Suggestions automatiques
-- **zsh-syntax-highlighting** — Coloration syntaxique
-- **zsh-completions** — Complétions supplémentaires
-- **zsh-history-substring-search** — Recherche dans l'historique
+- **zsh-autosuggestions** — Suggestions automatiques basées sur l'historique
+- **zsh-syntax-highlighting** — Coloration syntaxique des commandes
+- **Starship** — Prompt minimaliste et rapide
 
-### Alias utiles
+### Alias
 
 ```bash
-# Navigation
-alias ..="cd .."
-alias ...="cd ../.."
-alias ll="ls -la"
-alias la="ls -A"
-
-# Git
-alias g="git"
-alias gs="git status"
-alias ga="git add"
-alias gc="git commit"
-alias gp="git push"
-
-# Docker
-alias d="docker"
-alias dc="docker-compose"
-alias dps="docker ps"
+alias banana="clang-20 -fplugin=... -fsyntax-only"  # Epitech coding style
+alias banana-repo="banana-check-repo"
+alias banana-docker='docker run ...'                  # Dans un conteneur
 ```
 
 ---
@@ -119,85 +103,112 @@ alias dps="docker ps"
 
 ### Plugins principaux
 
-- **nvim-lspconfig** — Configuration LSP
-- **nvim-treesitter** — Highlighting syntaxique
-- **telescope.nvim** — Fuzzy finder
-- **nvim-cmp** — Complétion
-- **gitsigns.nvim** — Intégration Git
-- **lualine.nvim** — Barre de statut
+- **nvim-lspconfig** — Configuration LSP (C/C++, Rust, Python, TS, Go, Lua...)
+- **nvim-treesitter** — Analyse syntaxique avancée
+- **Snacks.nvim** — Ensemble d'utilitaires (picker, notifier, terminal, zen...)
+- **Mason** — Gestionnaire de serveurs LSP, linters et formatters
+- **nvim-cmp** — Système de complétion de code
+- **Lualine** — Barre d'état
+- **Harpoon** — Navigation rapide entre fichiers
+- **Oil** — Gestionnaire de fichiers dans le buffer
+- **Bufferline** — Onglets pour les buffers
+- **Lspsaga** — UI améliorée pour le LSP
+- **Telescope** — Recherche fuzzy
+- **Undotree** — Visualisation de l'historique
+- **Orgmode** — Prise de notes en .org
+
+### Thèmes disponibles
+
+Cyberdream · Oxocarbon · Dracula · Ayu · VSCode Colors · Noirblaze · Sunbather · Pinkmare · Onedark
 
 ### Raccourcis clavier
 
 | Mode | Touche | Action |
 |:-----|:-------|:-------|
-| Normal | `<leader>ff` | Fichier |
-| Normal | `<leader>fg` | Grep |
-| Normal | `<leader>fb` | Buffers |
-| Normal | `<leader>fh` | Aide |
-| Insert | `jk` | Échap |
+| Normal | `<leader>ff` | Recherche de fichiers |
+| Normal | `<leader>sg` | Grep |
+| Normal | `gd` | Aller à la définition |
+| Normal | `gr` | Références |
+| Normal | `<leader>z` | Mode Zen |
+| Normal | `<leader>gg` | Lazygit |
+| Normal | `<C-/>` | Terminal |
+| Normal | `<leader>uC` | Changer de thème |
+| Insert | `<C-Space>` | Complétion |
 
 ---
 
-## 🖥️ Hyprland
+## 🪟 OXWM
+
+Gestionnaire de fenêtres X11 dynamique avec barre d'état intégrée.
 
 ### Raccourcis clavier
 
 | Touche | Action |
 |:-------|:-------|
 | `Super + Return` | Terminal |
-| `Super + D` | Launcher |
-| `Super + Q` | Fermer la fenêtre |
+| `Super + D` | Dmenu |
+| `Super + A` | Fermer la fenêtre |
 | `Super + F` | Plein écran |
+| `Super + Q` | Activer/désactiver les gaps |
+| `Super + Shift + S` | Capture d'écran (Flameshot) |
 | `Super + 1-9` | Changer de workspace |
+| `Super + Shift + 1-9` | Déplacer la fenêtre vers un workspace |
+| `Super + H/L` | Redimensionner le master |
+| `Super + J/K` | Focus fenêtre suivante/précédente |
+| `Super + Shift + J/K` | Déplacer la fenêtre dans la stack |
+
+---
+
+## 🖥️ Kitty
+
+Terminal GPU-accéléré avec thème Gruvbox dark.
+
+### Raccourcis
+
+| Touche | Action |
+|:-------|:-------|
+| `Ctrl+Shift+F` | Clear + cd interactif |
+| `Ctrl+F` | Envoyer `fg` (foreground) |
 
 ---
 
 ## 🎨 Thèmes
 
+Toutes les configurations utilisent une palette **Gruvbox dark** cohérente.
+
 ### Couleurs
 
 ```bash
-# Couleurs du terminal
-background = #1e1e2e
-foreground = #cdd6f4
-cursor = #f5e0dc
-selection_background = #45475a
+background = #000000 / #1d2021
+foreground = #ebdbb2
+red        = #cc231c
+green      = #989719
+yellow     = #d79920
+blue       = #448488
+magenta    = #b16185
+cyan       = #689d69
 ```
 
 ### Polices
 
-```bash
-# Police principale
-font_family = JetBrains Mono
-font_size = 12
-```
+- **JetBrainsMono Nerd Font** — 11pt (Kitty)
+- **FiraCode Nerd Font** — 14pt (Neovim)
 
 ---
 
 ## 🔄 Mise à jour
 
 ```bash
-# Mettre à jour les dotfiles
 cd ~/dotfiles
 git pull
-
-# Réinstaller avec stow
-stow -R zsh nvim hyprland kitty waybar
+stow -R zsh nvim oxwm kitty
 ```
-
----
-
-## 📝 Notes
-
-- Les dotfiles sont conçus pour **NixOS** mais fonctionnent sur d'autres distributions Linux
-- Pensez à adapter les chemins selon votre système
-- Les configurations sont modulaires — installez seulement ce dont vous avez besoin
 
 ---
 
 ## 👤 Auteur
 
-**Lucas Kvn** — [GitHub](https://github.com/lucasskvn) — [lucasskvn.fr](https://lucasskvn.fr)
+**lucasskvn** — [GitHub](https://github.com/lucasskvn)
 
 ---
 

@@ -1,1 +1,28 @@
 vim.cmd [[colorscheme oxocarbon]]
+-- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "FloatBorder", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "TelescopeNormal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "TelescopeBorder", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "StatusLine", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "StatusLineNC", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "SnacksNormal", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "SnacksBorder", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "SnacksHeader", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "SnacksSection", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "SnacksKey", { bg = "none" })
+-- vim.api.nvim_set_hl(0, "SnacksValue", { bg = "none" })
+-- Rose pour les mots-clés, types, etc.
+-- vim.api.nvim_set_hl(0, "Keyword", { fg = "#ff79c6", bold = true })      -- if, else, return...
+-- vim.api.nvim_set_hl(0, "Conditional", { fg = "#ff79c6", bold = true })  -- if, else, switch...
+-- vim.api.nvim_set_hl(0, "Repeat", { fg = "#ff79c6", bold = true })       -- for, while...
+-- vim.api.nvim_set_hl(0, "Type", { fg = "#ff79c6", bold = true })         -- int, char, float...
+-- vim.api.nvim_set_hl(0, "StorageClass", { fg = "#ff79c6", bold = true }) -- static, extern...
+-- vim.api.nvim_set_hl(0, "Structure", { fg = "#ff79c6", bold = true })    -- struct, union...
+-- vim.api.nvim_set_hl(0, "Operator", { fg = "#ff79c6" })                  -- +, -, *, /, etc.
+
+-- -- Bleu pour les variables, violet pour les fonctions
+-- vim.api.nvim_set_hl(0, "Identifier", { fg = "#61afef" })                -- noms de variables (bleu)
+-- vim.api.nvim_set_hl(0, "Function", { fg = "#c678dd", bold = true })     -- noms de fonctions (violet)

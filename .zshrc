@@ -1,23 +1,14 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
-
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export PATH="$HOME/delivery/my_scripts:$PATH"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -80,9 +71,6 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git)
-plugins=(aliases)
-plugins=(catimg)
-plugins=(kitty)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -112,24 +100,34 @@ source $ZSH/oh-my-zsh.sh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
- #alias zshconfig="mate ~/.zshrc"
- #alias ohmyzsh="mate ~/.oh-my-zsh"
+# alias zshconfig="mate ~/.zshrc"
+# alias ohmyzsh="mate ~/.oh-my-zsh"
+#
+# Suggestions automatiques
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# Surlignage syntaxique (doit toujours être en DERNIER)
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Configuration des suggestions
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
+bindkey '^ ' autosuggest-accept
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# Initialisation de Starship (si tu l'as installé avec pacman -S starship)
+if command -v starship >/dev/null 2>&1; then
+  eval "$(starship init zsh)"
+fi
 
-export PATH=$PATH:/home/lucasskvn/.spicetify
+export TERM=xterm-256color
+export PATH="$HOME/.local/bin:$PATH"
+export PATH=$HOME/gbdk/bin:$PATH
+export GBDKDIR=$HOME/gbdk/
 
-# Définir un widget qui exécute 'fg'
-function fg-widget() {
-  fg
-  zle reset-prompt
-}
-zle -N fg-widget
+# opencode
+export PATH=/home/virtualangel/.opencode/bin:$PATH
 
-# Associer CTRL+F au widget (CTRL+F = ^F)
-bindkey '^F' fg-widget
+# bun completions
+[ -s "/home/virtualangel/.bun/_bun" ] && source "/home/virtualangel/.bun/_bun"
+
+# bun
+export PATH="$HOME/.npm-global/bin:$PATH"
+
