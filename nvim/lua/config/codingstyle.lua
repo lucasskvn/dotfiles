@@ -1,4 +1,8 @@
 vim.api.nvim_create_user_command("CSquickfix", function()
+  if vim.fn.executable("coding-style") == 0 then
+    vim.notify("coding-style is not installed", vim.log.levels.WARN)
+    return
+  end
   local handle = io.popen("coding-style . 2>&1")
   local output = handle:read("*a")
   handle:close()

@@ -3,7 +3,14 @@ return {
   event = 'VeryLazy',
   ft = { 'org' },
   config = function()
-    -- Setup orgmode
+    vim.fn.mkdir(vim.fn.expand("~/orgfiles"), "p")
+    local refile = vim.fn.expand("~/orgfiles/refile.org")
+    local f = io.open(refile, "r")
+    if not f then
+      io.open(refile, "w"):close()
+    else
+      f:close()
+    end
     require('orgmode').setup({
       org_agenda_files = '~/orgfiles/**/*',
       org_default_notes_file = '~/orgfiles/refile.org',

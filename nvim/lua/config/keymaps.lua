@@ -7,7 +7,7 @@ vim.opt.colorcolumn = '80'
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 vim.opt.number = true         -- Affiche le numéro absolu sur la ligne courante
 vim.opt.relativenumber = true -- Affiche les numéros relatifs ailleurs
 
@@ -148,21 +148,37 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- Other
 vim.keymap.set('n', '<leader>z', function() Snacks.zen() end, { desc = "Toggle Zen Mode" })
-vim.keymap.set('n', '<leader>Z', function() Snacks.zen.zoom() end, { desc = "Toggle Zoom" })
+vim.keymap.set('n', '<leader>Z', function()
+  if vim.t.zoom_restore then
+    vim.cmd(vim.t.zoom_restore)
+    vim.o.equalalways = vim.t.zoom_equalalways
+    vim.t.zoom_restore = nil
+  else
+    vim.t.zoom_restore = vim.fn.winrestcmd()
+    vim.t.zoom_equalalways = vim.o.equalalways
+    vim.o.equalalways = false
+    vim.cmd('wincmd |')
+    vim.cmd('wincmd _')
+  end
+end, { desc = "Toggle Zoom" })
 vim.keymap.set('n', '<leader>.', function() Snacks.scratch() end, { desc = "Toggle Scratch Buffer" })
 vim.keymap.set('n', '<leader>S', function() Snacks.scratch.select() end, { desc = "Select Scratch Buffer" })
 vim.keymap.set('n', '<leader>n', function() Snacks.notifier.show_history() end, { desc = "Notification History" })
 vim.keymap.set('n', '<leader>bd', function() Snacks.bufdelete() end, { desc = "Delete Buffer" })
 vim.keymap.set('n', '<leader>cR', function() Snacks.rename.rename_file() end, { desc = "Rename File" })
 vim.keymap.set({ 'n', 'v' }, '<leader>gB', function() Snacks.gitbrowse() end, { desc = "Git Browse" })
-vim.keymap.set('n', '<leader>gg', function() Snacks.lazygit() end, { desc = "Lazygit" })
+vim.keymap.set('n', '<leader>gg', function()
+  if vim.fn.executable("lazygit") == 1 then
+    Snacks.lazygit()
+  else
+    vim.notify("lazygit is not installed", vim.log.levels.WARN)
+  end
+end, { desc = "Lazygit" })
 vim.keymap.set('n', '<leader>un', function() Snacks.notifier.hide() end, { desc = "Dismiss All Notifications" })
 vim.keymap.set('n', '<c-/>', function() Snacks.terminal() end, { desc = "Toggle Terminal" })
 vim.keymap.set('n', '<c-_>', function() Snacks.terminal() end, { desc = "which_key_ignore" })
 vim.keymap.set({ 'n', 't' }, ']r', function() Snacks.words.jump(vim.v.count1) end, { desc = "Next Reference" })
 vim.keymap.set({ 'n', 't' }, '[r', function() Snacks.words.jump(-vim.v.count1) end, { desc = "Prev Reference" })
-vim.keymap.set('n', ']', '}', { noremap = true, silent = true, desc = "Next Paragraph" })
-vim.keymap.set('n', '[', '{', { noremap = true, silent = true, desc = "Prev Paragraph" })
 vim.keymap.set('n', '<leader>N', function()
   Snacks.win({
     file = vim.api.nvim_get_runtime_file("doc/news.txt", false)[1],
@@ -213,14 +229,10 @@ end
 -- Harpoon
 vim.keymap.set("n", "<leader>a", function() require("harpoon.mark").add_file() end, { desc = "Harpoon Add File" })
 vim.keymap.set("n", "<leader>h", function() require("harpoon.ui").toggle_quick_menu() end, { desc = "Harpoon Menu" })
-vim.keymap.set("n", "<leader>&", function() require("harpoon.ui").nav_file(1) end, { desc = "Harpoon to File 1" })
-vim.keymap.set("n", "<leader>é", function() require("harpoon.ui").nav_file(2) end, { desc = "Harpoon to File 2" })
-vim.keymap.set("n", "<leader>\"", function() require("harpoon.ui").nav_file(3) end, { desc = "Harpoon to File 3" })
-vim.keymap.set("n", "<leader>'", function() require("harpoon.ui").nav_file(4) end, { desc = "Harpoon to File 4" })
 
 -- Undotree
 
-vim.keymap.set('n', '<leader>u', '<cmd>UndotreeToggle<CR>', { desc = "Toggle Undotree" })
+vim.keymap.set('n', '<leader>tu', '<cmd>UndotreeToggle<CR>', { desc = "Toggle Undotree" })
 vim.keymap.set('n', '<leader>U', '<cmd>UndotreeFocus<CR>', { desc = "Focus Undotree" })
 
 -- Bufferline

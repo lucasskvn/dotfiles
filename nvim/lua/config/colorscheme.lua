@@ -1,4 +1,8 @@
-vim.cmd [[colorscheme oxocarbon]]
+local ok, err = pcall(vim.cmd, "colorscheme oxocarbon")
+if not ok then
+  vim.notify("oxocarbon failed: " .. tostring(err) .. " - falling back to habamax", vim.log.levels.WARN)
+  vim.cmd("colorscheme habamax")
+end
 -- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })

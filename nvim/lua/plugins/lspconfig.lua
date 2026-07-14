@@ -34,7 +34,7 @@ return {
     lspconfig.bashls.setup({ capabilities = capabilities })
 
     -- TypeScript/JavaScript (tsserver)
-    lspconfig.tsserver.setup({ capabilities = capabilities })
+    lspconfig.ts_ls.setup({ capabilities = capabilities })
 
     -- HTML/CSS/JSON/YAML
     lspconfig.html.setup({ capabilities = capabilities })

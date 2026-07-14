@@ -1,132 +1,88 @@
 # Configuration NeoVim
 
-## Introduction
+## Prérequis
 
-Cette configuration NeoVim est personnalisée avec un ensemble de plugins soigneusement sélectionnés pour offrir une expérience d'édition puissante et efficace. Elle comprend des outils pour le développement en C, Lua, Python et Rust, ainsi que de nombreuses fonctionnalités pour améliorer la productivité.
+### Obligatoires
+- **Neovim** >= 0.9
+- **git** (pour le bootstrap de lazy.nvim)
 
-## Structure de la configuration
+### Recommandés
+- **Nerd Font** (JetBrainsMono, FiraCode, etc.) — pour les icônes dans bufferline, lualine, nvim-tree, render-markdown
+- **Node.js** — requis par les LSP servers installés via Mason (typescript-language-server, bash-language-server, etc.)
+- **make + gcc** — pour compiler LuaSnip jsregexp et les parsers treesitter
+- **ripgrep** (`rg`) — pour Snacks grep
+- **lazygit** (optionnel) — pour `<leader>gg`
 
-La configuration est organisée de manière modulaire:
+### Installation
 
-- `init.lua` : Point d'entrée de la configuration
-- `plugins.lua` : Liste de tous les plugins chargés
-- `lua/config/` : Contient les fichiers de configuration généraux
-- `lua/plugins/` : Contient les configurations spécifiques à chaque plugin
+```bash
+git clone https://github.com/your-username/nvim-config.git ~/.config/nvim
+```
 
-## Plugins installés
+Au premier lancement, lazy.nvim s'auto-installe, puis tous les plugins sont chargés. Mason installe automatiquement les LSP servers listés dans `lua/plugins/mason.lua`.
+
+## Structure
+
+- `init.lua` — Point d'entrée
+- `lua/config/` — Configuration générale (keymaps, colorscheme, lazy bootstrap, epiheader, codingstyle)
+- `lua/plugins/` — Un fichier par plugin (auto-découvert par lazy.nvim via `{ import = "plugins" }`)
+
+## Plugins
 
 ### Éditeur et interface
-
-- **Treesitter** : Analyse syntaxique avancée pour le code
-- **Snacks** : Ensemble d'utilitaires pour Neovim
-- **Mason** : Gestionnaire de serveurs LSP, linters et formatters
-- **Telescope** : Recherche fuzzy pour les fichiers, buffers, etc.
-- **Lualine** : Barre d'état améliorée
-- **NvimTree** : Explorateur de fichiers
-- **Oil** : Gestionnaire de fichiers dans le buffer
-- **Harpoon** : Navigation rapide entre fichiers
-- **Undotree** : Visualisation de l'historique des modifications
-- **Autopairs** : Fermeture automatique des parenthèses, crochets, etc.
-- **Bufferline** : Gestion des buffers avec onglets
+- **Treesitter** — Analyse syntaxique avancée
+- **Snacks** — Utilitaires (picker, notifier, zen, terminal, etc.)
+- **Mason** + **mason-tool-installer** — Gestionnaire et auto-installation des LSP servers
+- **Telescope** — Recherche fuzzy
+- **Lualine** — Barre d'état
+- **NvimTree** — Explorateur de fichiers
+- **Oil** — Gestionnaire de fichiers dans le buffer
+- **Harpoon** — Navigation rapide entre fichiers
+- **Undotree** — Historique des modifications
+- **Autopairs** — Fermeture automatique des paires
+- **Bufferline** — Onglets de buffers
+- **render-markdown** — Rendu visuel Markdown
 
 ### LSP et complétion
-
-- **LSP Config** : Configuration des serveurs de langage
-- **nvim-cmp** : Système de complétion de code
-- **LuaSnip** : Système de snippets
+- **LSP Config** — Configuration des serveurs de langage
+- **nvim-cmp** — Complétion de code
+- **LuaSnip** — Snippets
+- **hover.nvim** — Hover enrichi (LSP + man + dictionnaire)
+- **lspsaga** — UI LSP (finder, code actions, outline, etc.)
+- **lsp_signature** — Signature de fonction en hint
 
 ### Thèmes
+- Cyberdream, Oxocarbon (défaut), Dracula, Ayu-vim, VSCode Colors, Noirblaze, Sunbather, Pinkmare
 
-- **Cyberdream**
-- **Oxocarbon**
-- **Dracula**
-- **Ayu-vim**
-- **VSCode Colors**
-- **Noirblaze**
-- **Sunbather**
-- **Pinkmare**
+### Utilitaires Epitech
+- **EpiHeader** — `<C-c><C-h>` insère un header Epitech
+- **Epi-quickfix** — Intégration coding-style dans la quickfixlist
+- **CSquickfix** — Commande `:CSquickfix` (nécessite le binaire `coding-style`)
 
-### Utilitaires spécifiques
+## Keymaps
 
-- **Epi-quickfix** : Utilitaires pour Epitech
-
-## Keymaps importants
-
-### Touches générales
-
-- `<Space>` : Touche leader
-- `<ESC>` : Désactive la surbrillance de recherche
-- `<leader>w` : Enregistre le fichier
-
-### Navigation et recherche
-
-- `<leader>ff` / `<leader>sf` : Recherche de fichiers
-- `<leader>sg` : Recherche par grep
-- `<leader>sb` : Recherche dans les lignes du buffer
-- `<C-/>` : Ouvre un terminal
-
-### LSP et code
-
-- `gd` : Aller à la définition
-- `gD` : Aller à la déclaration
-- `gr` : Afficher les références
-- `gI` : Aller à l'implémentation
-- `gy` : Aller à la définition de type
-- `<leader>ss` : Afficher les symboles LSP
-- `<leader>sd` : Afficher les diagnostics
-
-### Epitech
-
-- `<C-c><C-h>` : Insérer un header Epitech
-- `<C-c><C-c>` : Enregistrer et compiler
-- `<leader>gb` : Aller à une ligne spécifique
-
-### Gestion de l'interface
-
-- `<leader>z` : Activer/désactiver le mode Zen
-- `<leader>Z` : Activer/désactiver le zoom
-- `<leader>bd` : Supprimer un buffer
-- `<leader>N` : Actualités Neovim
-- `<leader>uC` : Sélectionner un thème de couleur
-
-### Autres
-
-- `<leader>.` : Ouvrir un buffer temporaire
-- `<leader>gg` : Ouvrir Lazygit
-- `<leader>n` : Historique des notifications
-- `<leader>cR` : Renommer un fichier
-
-## Configuration de base
-
-```lua
-vim.g.mapleader = ' '
-vim.opt.colorcolumn = '80'
-vim.opt.tabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.number = true
-vim.opt.relativenumber = true
-```
+| Touche | Action |
+|--------|--------|
+| `<Space>` | Leader |
+| `<leader>w` | Sauvegarder |
+| `<leader>ff` / `<leader>sf` | Recherche fichiers |
+| `<leader>sg` | Grep |
+| `<leader>gg` | Lazygit (si installé) |
+| `<leader>z` | Mode Zen |
+| `<leader>Z` | Zoom |
+| `<leader>t` | Oil (explorateur) |
+| `<leader>u` | Undotree |
+| `<leader>h` | Menu Harpoon |
+| `<leader>a` | Ajouter fichier Harpoon |
+| `<leader>uC` | Changer colorscheme |
+| `<C-/>` | Terminal |
+| `gd` / `gr` / `gI` / `gy` | LSP (def, refs, impl, type) |
+| `<leader>lf` / `<leader>la` / `<leader>lr` | Lspsaga (finder, code action, rename) |
+| `<Tab>` / `<S-Tab>` | Buffer suivant / précédent |
+| `<leader>&` à `<leader>à` | Aller au buffer 1-9 / dernier |
+| `<leader>bd` | Supprimer buffer |
+| `<leader>bp` | Pin/Unpin buffer |
 
 ## Thème
 
-Le thème par défaut est `retrobox`. La configuration prend en charge plusieurs thèmes qui peuvent être facilement changés avec `<leader>uC`.
-
-## Support des langages
-
-Cette configuration est optimisée pour:
-
-- C/C++ (clangd)
-- Lua (lua_ls)
-- Python (pyright)
-- Rust (rust_analyzer)
-
-D'autres langages peuvent être ajoutés facilement en configurant les serveurs LSP appropriés.
-
-## Fonctionnalités spéciales
-
-- Support pour les headers Epitech
-- Intégration avec git
-- Mode Zen pour une édition sans distraction
-- Navigation rapide entre les fichiers avec Harpoon
-- Gestion des fichiers avec Oil
+Oxocarbon par défaut, avec fallback automatique sur habamax en cas d'échec. Changer avec `<leader>uC`.

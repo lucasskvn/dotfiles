@@ -22,7 +22,7 @@
 local modkey = "Mod4"
 
 -- Terminal emulator command (defaults to alacritty)
-local terminal = "st"
+local terminal = "/usr/local/bin/st"
 
 -- Color palette - customize these to match your theme
 -- Alternatively you can import other files in here, such as 
@@ -76,6 +76,66 @@ local blocks = {
         color = colors.lavender,
         underline = false,
     }),
+    oxwm.bar.block.shell({
+        format = "C {}",
+        command = "awk '{printf \"%dC\", $1/1000}' /sys/class/hwmon/hwmon5/temp1_input",
+        interval = 10,
+        color = colors.blue,
+        underline = false,
+    }),
+    oxwm.bar.block.shell({
+        format = "U {}",
+        command = "top -bn1 | grep \"Cpu(s)\" | awk '{print $2+$4 \"%\"}'",
+        interval = 10,
+        color = colors.green,
+        underline = false,
+    }),
+    oxwm.bar.block.static({
+        text = " │  ",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
+    oxwm.bar.block.shell({
+        format = "V {}",
+        command = "amixer -D pulse sget Master 2>/dev/null | grep -oE '[0-9]+%' | head -1",
+        interval = 2,
+        color = colors.cyan,
+        underline = false,
+    }),
+    oxwm.bar.block.shell({
+        format = "{}",
+        command = "iwgetid -r 2>/dev/null || echo offline",
+        interval = 10,
+        color = colors.light_blue,
+        underline = false,
+    }),
+    oxwm.bar.block.static({
+        text = " │ ",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
+    oxwm.bar.block.shell({
+        format = "{}",
+        command = "curl -s 'wttr.in/Lyon?format=%c%t' 2>/dev/null || echo N/A",
+        interval = 600,
+        color = colors.purple,
+        underline = false,
+    }),
+    oxwm.bar.block.shell({
+        format = "↑ {}",
+        command = "checkupdates 2>/dev/null | wc -l",
+        interval = 3600,
+        color = colors.red,
+        underline = false,
+    }),
+    oxwm.bar.block.static({
+        text = " │  ",
+        interval = 999999999,
+        color = colors.lavender,
+        underline = false,
+    }),
     oxwm.bar.block.datetime({
         format = "{}",
         date_format = "%a, %b %d - %-I:%M:%S %P",
@@ -89,7 +149,6 @@ local blocks = {
         color = colors.lavender,
         underline = false,
     }),
-    --Uncomment to add battery status (useful for laptops)
     oxwm.bar.block.battery({
          format = "Bat: {}%",
          charging = "⚡ Bat: {}%",
@@ -257,31 +316,48 @@ oxwm.key.bind({ modkey, "Shift" }, "Period", oxwm.monitor.tag(1))
 
 -- Workspace (tag) navigation
 -- Switch to workspace N (tags are 0-indexed, so tag "1" is index 0)
+-- AZERTY: top row unshifted = &/é/"/'/(/-/è/_/ç
 local tag_keys = {
-    { "ampersand", "1" },
-    { "eacute", "2" },
-    { "quotedbl", "3" },
-    { "apostrophe", "4" },
-    { "parenleft", "5" },
-    { "minus", "6" },
-    { "egrave", "7" },
-    { "underscore", "8" },
-    { "ccedilla", "9" },
+    "ampersand",
+    "eacute",
+    "quotedbl",
+    "apostrophe",
+    "parenleft",
+    "minus",
+    "egrave",
+    "underscore",
+    "ccedilla",
 }
 
-local function bind_tag_keys(modifiers, keys, action)
-    for _, key in ipairs(keys) do
-        oxwm.key.bind(modifiers, key, action)
-    end
+for index, key in ipairs(tag_keys) do
+    local tag_index = index - 1
+    oxwm.key.bind({ modkey }, key, oxwm.tag.view(tag_index))
+    oxwm.key.bind({ modkey, "Shift" }, key, oxwm.tag.move_to(tag_index))
+    oxwm.key.bind({ modkey, "Control" }, key, oxwm.tag.toggleview(tag_index))
+    oxwm.key.bind({ modkey, "Control", "Shift" }, key, oxwm.tag.toggletag(tag_index))
+    oxwm.key.bind({ modkey, "Alt" }, key, oxwm.tag.move_to_and_view(tag_index))
 end
 
-for index, keys in ipairs(tag_keys) do
-    local tag_index = index - 1
-    bind_tag_keys({ modkey }, keys, oxwm.tag.view(tag_index))
-    bind_tag_keys({ modkey, "Shift" }, keys, oxwm.tag.move_to(tag_index))
-    bind_tag_keys({ modkey, "Control" }, keys, oxwm.tag.toggleview(tag_index))
-    bind_tag_keys({ modkey, "Control", "Shift" }, keys, oxwm.tag.toggletag(tag_index))
-end
+-------------------------------------------------------------------------------
+-- Volume controls
+-------------------------------------------------------------------------------
+-- F1/F2/F3 + XF86 multimedia keys via pactl (PulseAudio)
+oxwm.key.bind({}, "F1", oxwm.spawn({ "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle" }))
+oxwm.key.bind({}, "F2", oxwm.spawn({ "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%" }))
+oxwm.key.bind({}, "F3", oxwm.spawn({ "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%" }))
+
+oxwm.key.bind({}, "XF86AudioMute", oxwm.spawn({ "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle" }))
+oxwm.key.bind({}, "XF86AudioLowerVolume", oxwm.spawn({ "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%" }))
+oxwm.key.bind({}, "XF86AudioRaiseVolume", oxwm.spawn({ "pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%" }))
+
+-------------------------------------------------------------------------------
+-- Floating window resize (requires xdotool)
+-------------------------------------------------------------------------------
+-- Mod+Alt+H/J/K/L to resize the focused floating window by 20px
+oxwm.key.bind({ modkey, "Alt" }, "H", oxwm.spawn({ "xdotool", "getactivewindow", "windowsize", "--relative", "--", "-20", "0" }))
+oxwm.key.bind({ modkey, "Alt" }, "L", oxwm.spawn({ "xdotool", "getactivewindow", "windowsize", "--relative", "--", "20", "0" }))
+oxwm.key.bind({ modkey, "Alt" }, "J", oxwm.spawn({ "xdotool", "getactivewindow", "windowsize", "--relative", "--", "0", "20" }))
+oxwm.key.bind({ modkey, "Alt" }, "K", oxwm.spawn({ "xdotool", "getactivewindow", "windowsize", "--relative", "--", "0", "-20" }))
 
 -------------------------------------------------------------------------------
 -- Advanced: Keychords
