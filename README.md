@@ -1,4 +1,4 @@
-# ⚙️ Dotfiles — Configuration de Lucas Kvn
+# ⚙️ Dotfiles
 
 <div align="center">
   <img src="https://img.shields.io/badge/Zsh-Yes-green?style=for-the-badge&logo=zsh&logoColor=white" alt="Zsh">
