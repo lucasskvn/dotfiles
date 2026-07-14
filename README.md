@@ -5,20 +5,24 @@
   <img src="https://img.shields.io/badge/Neovim-Yes-green?style=for-the-badge&logo=neovim&logoColor=white" alt="Neovim">
   <img src="https://img.shields.io/badge/OXWM-Yes-blue?style=for-the-badge&logo=linux&logoColor=white" alt="OXWM">
   <img src="https://img.shields.io/badge/Kitty-Yes-green?style=for-the-badge&logo=kitty&logoColor=white" alt="Kitty">
+  <img src="https://img.shields.io/badge/ST-Yes-orange?style=for-the-badge&logo=linux&logoColor=white" alt="ST">
+  <img src="https://img.shields.io/badge/Dmenu-Yes-purple?style=for-the-badge&logo=linux&logoColor=white" alt="Dmenu">
 </div>
 
 <br>
 
-Mes dotfiles personnels pour un environnement de développement productif et esthétique. Configuration complète pour **Zsh**, **Neovim**, **OXWM** et **Kitty**.
+Mes dotfiles personnels pour un environnement de développement productif et esthétique. Configuration complète pour **Zsh**, **Neovim**, **OXWM**, **Kitty**, **ST** et **Dmenu**.
 
 ---
 
 ## ✨ Fonctionnalités
 
 - 🐚 **Zsh** — Shell configuré avec Oh My Zsh, autosuggestions et syntax highlighting
-- 📝 **Neovim** — Éditeur configuré avec LSP, Treesitter et une vingtaine de plugins
-- 🪟 **OXWM** — Gestionnaire de fenêtres X11 dynamique
+- 📝 **Neovim** — Éditeur configuré avec LSP, Treesitter et une trentaine de plugins
+- 🪟 **OXWM** — Gestionnaire de fenêtres X11 dynamique avec barre d'état intégrée
 - 🖥️ **Kitty** — Terminal GPU-accéléré avec thème Gruvbox
+- 🪄 **ST** — Terminal suckless (simple terminal) patché
+- 🚀 **Dmenu** — Lanceur d'applications suckless avec patch center et fuzzy
 - 🎨 **Thèmes** — Palette cohérente Gruvbox dans tous les outils
 
 ---
@@ -43,6 +47,8 @@ stow zsh
 stow nvim
 stow oxwm
 stow kitty
+stow st
+stow dmenu
 ```
 
 ### Installation manuelle
@@ -76,6 +82,15 @@ dotfiles/
 │   │   └── lua/plugins/   # Configs des plugins
 │   └── oxwm/              # Configuration OXWM
 │       └── config.lua
+├── st/                    # Simple Terminal (suckless)
+│   ├── config.h           # Configuration personnalisée
+│   ├── config.def.h       # Configuration par défaut
+│   └── ...
+├── dmenu/                 # Dynamic Menu (suckless)
+│   ├── config.h           # Configuration personnalisée
+│   ├── config.def.h       # Configuration par défaut
+│   ├── patches/           # Patches appliqués
+│   └── ...
 └── README.md
 ```
 
@@ -106,8 +121,14 @@ alias banana-docker='docker run ...'                  # Dans un conteneur
 - **nvim-lspconfig** — Configuration LSP (C/C++, Rust, Python, TS, Go, Lua...)
 - **nvim-treesitter** — Analyse syntaxique avancée
 - **Snacks.nvim** — Ensemble d'utilitaires (picker, notifier, terminal, zen...)
-- **Mason** — Gestionnaire de serveurs LSP, linters et formatters
+- **Mason** + **mason-tool-installer** — Gestionnaire de serveurs LSP, linters et formatters
 - **nvim-cmp** — Système de complétion de code
+- **conform.nvim** — Formatage automatique à la sauvegarde
+- **gitsigns.nvim** — Indicateurs Git dans la gouttière
+- **which-key.nvim** — Aide contextuelle pour les raccourcis
+- **nvim-surround** — Manipulation de délimiteurs (parenthèses, guillemets...)
+- **Comment.nvim** — Commentaire de code
+- **render-markdown.nvim** — Rendu Markdown dans Neovim
 - **Lualine** — Barre d'état
 - **Harpoon** — Navigation rapide entre fichiers
 - **Oil** — Gestionnaire de fichiers dans le buffer
@@ -172,6 +193,42 @@ Terminal GPU-accéléré avec thème Gruvbox dark.
 
 ---
 
+## 🪄 ST (Simple Terminal)
+
+Terminal suckless (st) version 0.9.3, compilé depuis [suckless.org](https://st.suckless.org/).
+
+### Modifications
+
+- Police **JetBrainsMono Nerd Font** avec fallback Noto Color Emoji
+- Scroll avec les touches `Shift+PageUp/PageDown` et la molette
+- Raccourci `Ctrl+O` pour ouvrir l'URL sélectionnée dans Firefox
+- Recherche avec `Ctrl+Shift+F`
+- Copier (`Ctrl+Shift+C`) / Coller (`Ctrl+Shift+V`)
+- Opacité et transparence configurées
+
+---
+
+## 🚀 Dmenu
+
+Lanceur d'applications dynamique depuis [suckless.org](https://tools.suckless.org/dmenu/).
+
+### Patches appliqués
+
+- **center** — Centrage de dmenu à l'écran
+- **fuzzy** — Matching flou pour la recherche
+- **alpha** — Support de la transparence
+- **highlight** — Surlignage des correspondances
+
+### Utilisation
+
+| Touche | Action |
+|:-------|:-------|
+| `Super + D` | Lancer dmenu (configuré dans OXWM) |
+| `Alt+1-9` | Navigation dans les résultats |
+| `Entrée` | Lancer la sélection |
+
+---
+
 ## 🎨 Thèmes
 
 Toutes les configurations utilisent une palette **Gruvbox dark** cohérente.
@@ -201,7 +258,7 @@ cyan       = #689d69
 ```bash
 cd ~/dotfiles
 git pull
-stow -R zsh nvim oxwm kitty
+stow -R zsh nvim oxwm kitty st dmenu
 ```
 
 ---
