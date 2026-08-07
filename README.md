@@ -65,6 +65,43 @@ cp -r .config/* ~/.config/
 
 ---
 
+## 🖥️ NixOS
+
+La configuration système est un **flake NixOS** (nixpkgs pinné via `flake.lock`).
+
+### Structure
+
+```
+flake.nix                 # Entrée du flake (nixpkgs, sortie nixosConfigurations.butterfly)
+nixos/
+├── configuration.nix     # Point d'entrée : imports + allowUnfree + nix.gc
+├── hardware-configuration.nix  # Généré par nixos-generate-config (machine-specific)
+├── boot.nix              # systemd-boot
+├── networking.nix        # hostname, NetworkManager
+├── locale.nix            # timezone, locale fr_FR.UTF-8
+├── display.nix           # X11, Qtile, clavier fr, wallpaper
+├── users.nix             # Utilisateur lucas
+├── programs.nix          # Firefox, Zsh
+├── packages.nix          # Paquets système
+├── services.nix          # OpenSSH, firewall
+└── audio.nix             # PipeWire
+```
+
+### Build et switch
+
+```bash
+# Reconstruire le système
+sudo nixos-rebuild switch --flake ~/dotfiles#butterfly
+
+# Build sans appliquer (validation)
+nixos-rebuild build --flake ~/dotfiles#butterfly
+
+# Vérification complète du flake
+nix flake check ~/dotfiles
+```
+
+---
+
 ## 📁 Structure
 
 ```
