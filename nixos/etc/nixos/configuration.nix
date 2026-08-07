@@ -94,7 +94,23 @@
     gnumake
     opencode
     zsh
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    fastfetch
   ];
+
+    users.users.lucas.shell = pkgs.zsh;
+
+    programs.zsh = {
+        enable = true;
+        autosuggestions.enable = true;
+        syntaxHighlighting.enable = true;
+        ohMyZsh = {
+            enable = true;
+            theme = "robbyrussell";
+            plugins = [ "git" ];
+        };
+    };
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
