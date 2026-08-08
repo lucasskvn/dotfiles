@@ -6,10 +6,10 @@ set my_smtp_url  = "smtps://`cat /run/secrets/mail_imap_user`@smtp.gmail.com:465
 
 set folder = "imaps://$my_imap_host"
 set spoolfile = "+INBOX"
-set mailboxes = "+INBOX"
 set postponed = "+Drafts"
 set record = "+Sent"
 set trash = "+Trash"
+mailboxes +INBOX +Sent +Drafts +Trash
 
 set imap_user = $my_imap_user
 set imap_pass = $my_imap_pass
@@ -31,32 +31,31 @@ set mail_check = 60
 set pager = "less -R"
 set pager_index_lines = 10
 set pager_context = 3
-set markers = " \n"
+set markers = yes
 set smart_wrap = yes
 
+set color_directcolor = yes
+
 # Couleurs Gruvbox
-color list "black" "#282828" default
-color quoted "#928374" default
+color quoted   "#928374" default
 color indicator "#b8bb26" "#3c3836"
 color attachment "#fabd2f" default
-color error "#fb4934" default
-color normal "#ebdbb2" default
-color status "#ebdbb2" "#3c3836"
-color tilde "#3c3836" default
-color tree "#928374" default
-color bold "#ebdbb2" default
+color error     "#fb4934" default
+color normal    "#ebdbb2" default
+color status    "#ebdbb2" "#3c3836"
+color tilde     "#3c3836" default
+color tree      "#928374" default
+color bold      "#ebdbb2" default
 color underline "#83a598" default
 color hdrdefault "#83a598" default
-color marker "#fe8019" default
-color search "#fabd2f" "#3c3836"
-color statuscolor "#ebdbb2" "#3c3836"
-color message "#fabd2f" "#3c3836"
-color prompt "#83a598" "#3c3836"
+color search    "#fabd2f" "#3c3836"
+color message   "#fabd2f" "#3c3836"
+color prompt    "#83a598" "#3c3836"
 
 # Raccourcis
-bind p previous-new
-bind n next-new
-bind < previous-thread
-bind > next-thread
-bind S sync-mailbox
-bind x quit
+bind index p previous-new
+bind index n next-new
+bind index < previous-thread
+bind index > next-thread
+bind index S sync-mailbox
+bind index x quit

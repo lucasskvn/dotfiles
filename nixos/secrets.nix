@@ -11,9 +11,9 @@ in
     git_email = { };
     ssh_authorized_key = { };
     # Lisible par lucas : lu à runtime par mbsync (PassCmd) et neomutt
-    mail_imap_host = { owner = "lucas"; mode = "0400"; };
-    mail_imap_user = { owner = "lucas"; mode = "0400"; };
-    mail_imap_pass = { owner = "lucas"; mode = "0400"; };
+    mail_imap_host = { owner = "lucas"; mode = "0400"; stripTrailingNewline = true; };
+    mail_imap_user = { owner = "lucas"; mode = "0400"; stripTrailingNewline = true; };
+    mail_imap_pass = { owner = "lucas"; mode = "0400"; stripTrailingNewline = true; };
   };
 
   # Écrit les configs utilisateur depuis les secrets décryptés
