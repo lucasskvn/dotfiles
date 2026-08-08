@@ -17,6 +17,7 @@
     ./nix-ld.nix
     ./git.nix
     ./fonts.nix
+    ./secrets.nix
   ];
 
   nixpkgs.config.allowUnfree = true;

@@ -4,10 +4,6 @@
   programs.git = {
     enable = true;
     config = {
-      user = {
-        name = "Lucas";
-        email = "lucas.sangkhavongs@epitech.eu";
-      };
       init.defaultBranch = "main";
       pull.rebase = true;
       core.pager = "delta";

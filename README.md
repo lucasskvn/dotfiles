@@ -72,10 +72,12 @@ La configuration système est un **flake NixOS** (nixpkgs pinné via `flake.lock
 ### Structure
 
 ```
-flake.nix                 # Entrée du flake (nixpkgs, sortie nixosConfigurations.butterfly)
+flake.nix                 # Entrée du flake (nixpkgs + sops-nix, sortie nixosConfigurations.butterfly)
+secrets.yaml              # Secrets chiffrés (sops) : identité git, clé SSH
 nixos/
 ├── configuration.nix     # Point d'entrée : imports + allowUnfree + nix.gc
 ├── hardware-configuration.nix  # Généré par nixos-generate-config (machine-specific)
+├── secrets.nix           # sops-nix : secrets + écriture configs utilisateur à l'activation
 ├── boot.nix              # systemd-boot
 ├── networking.nix        # hostname, NetworkManager
 ├── locale.nix            # timezone, locale fr_FR.UTF-8
@@ -85,6 +87,18 @@ nixos/
 ├── packages.nix          # Paquets système
 ├── services.nix          # OpenSSH, firewall
 └── audio.nix             # PipeWire
+```
+
+### Secrets (sops-nix)
+
+Les valeurs personnelles (identité git, clé SSH) sont chiffrées avec [sops-nix](https://github.com/Mic92/sops-nix) dans `secrets.yaml` — commité chiffré, décrypté à l'activation vers `/run/secrets`. La clé de déchiffrement est la clé age de la machine (`~/.config/sops/age/keys.txt`).
+
+```bash
+# Éditer les secrets (nécessite sops + la clé age)
+sops secrets.yaml
+
+# Régénérer une clé age si absente
+age-keygen -o ~/.config/sops/age/keys.txt
 ```
 
 ### Build et switch
