@@ -38,5 +38,7 @@
     betterlockscreen
     shellcheck
     shfmt
+    sops
+    age
   ];
 }
