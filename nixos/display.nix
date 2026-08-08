@@ -5,9 +5,13 @@
     enable = true;
     windowManager.qtile.enable = true;
     xkb.layout = "fr";
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 35;
     displayManager.sessionCommands = ''
       xwallpaper --zoom /home/lucas/dotfiles/wallpapers/wallpaper.jpg
-      xset r rate 200 35 &
     '';
   };
+
+  services.udisks2.enable = true;
+  services.gvfs.enable = true;
 }
