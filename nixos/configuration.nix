@@ -12,16 +12,25 @@
     ./packages.nix
     ./services.nix
     ./audio.nix
+    ./dev.nix
+    ./docker.nix
+    ./nix-ld.nix
+    ./git.nix
+    ./fonts.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
 
+  nix.settings = {
+    auto-optimise-store = true;
+    experimental-features = [ "nix-command" "flakes" ];
+  };
   nix.gc = {
     automatic = true;
     dates = "weekly";
     options = "--delete-older-than 30d";
   };
-  nix.settings.auto-optimise-store = true;
+  nix.optimise.automatic = true;
 
   system.stateVersion = "26.05";
 }
