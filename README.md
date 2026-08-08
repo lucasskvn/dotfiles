@@ -46,6 +46,7 @@ cd ~/dotfiles
 stow zsh
 stow nvim
 stow oxwm
+stow qtile
 stow kitty
 stow st
 stow dmenu
@@ -132,12 +133,97 @@ nix flake check ~/dotfiles
 
 ### Installer un nouveau host (migration VM → laptop)
 
-1. Installer NixOS sur le laptop (UEFI) et cloner le repo dans `~/dotfiles`
-2. Générer le hardware : `nixos-generate-config --root /mnt` puis copier vers `hosts/<nom>/hardware-configuration.nix`
-3. Créer `hosts/<nom>/configuration.nix` (hostname, CPU/GPU, batterie...) — modèle : `hosts/butterfly/`
-4. Ajouter `nom = mkHost "nom";` dans `flake.nix`
-5. Générer la clé age du laptop + `sops updatekeys secrets.yaml` (voir Secrets)
-6. `sudo nixos-rebuild switch --flake ~/dotfiles#<nom>`
+#### 1. Installer NixOS (depuis l'ISO)
+
+```bash
+# Partitionner (UEFI) : p1 = EFI (512M vfat), p2 = root ext4, p3 = swap
+fdisk /dev/nvme0n1
+mkfs.fat -F 32 /dev/nvme0n1p1
+mkfs.ext4 /dev/nvme0n1p2
+mkswap /dev/nvme0n1p3 && swapon /dev/nvme0n1p3
+
+mount /dev/nvme0n1p2 /mnt
+mount --mkdir /dev/nvme0n1p1 /mnt/boot
+
+nixos-generate-config --root /mnt
+# Écrire une config minimale dans /mnt/etc/nixos/configuration.nix
+nixos-install
+reboot
+```
+
+Configuration minimale pour `nixos-install` :
+
+```nix
+{ config, lib, pkgs, ... }:
+{
+  imports = [ ./hardware-configuration.nix ];
+  boot.loader.systemd-boot.enable = true;
+  networking.networkmanager.enable = true;
+  users.users.lucas = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+  };
+  system.stateVersion = "26.05";
+}
+```
+
+#### 2. Premier boot : réseau + outils
+
+```bash
+# Connexion wifi si nécessaire
+nmcli device wifi connect <SSID> password <mot-de-passe>
+
+# Le système frais n'a pas encore sops/age/git
+nix --extra-experimental-features "nix-command flakes" shell nixpkgs#git nixpkgs#sops nixpkgs#age
+```
+
+#### 3. Cloner le repo + récupérer le hardware
+
+```bash
+git clone https://github.com/lucasskvn/dotfiles.git ~/dotfiles
+cd ~/dotfiles
+
+# Copier le hardware généré à l'installation vers le host
+sudo cp /etc/nixos/hardware-configuration.nix hosts/butterfly/hardware-configuration.nix
+sudo chown lucas:users hosts/butterfly/hardware-configuration.nix
+```
+
+#### 4. Clé age + secrets
+
+```bash
+# Générer la clé age du laptop (dans ~/.config/sops/age/keys.txt)
+age-keygen -o ~/.config/sops/age/keys.txt
+age-keygen -y ~/.config/sops/age/keys.txt   # affiche la clé publique
+
+# Ajouter cette clé publique comme recipient dans secrets.yaml
+sops updatekeys secrets.yaml
+```
+
+#### 5. Premier rebuild
+
+```bash
+sudo nixos-rebuild switch --flake ~/dotfiles#butterfly
+```
+
+Le premier switch télécharge nixpkgs et construit tout le système. L'activation écrit aussi l'identité git (`~/.config/git/config`) et la clé SSH (`~/.ssh/authorized_keys`) depuis les secrets décryptés.
+
+#### 6. Installer les dotfiles
+
+```bash
+cd ~/dotfiles
+stow zsh nvim oxwm qtile kitty st dmenu
+```
+
+#### 7. Migrer les données depuis la VM
+
+```bash
+# Depuis la VM, vers le laptop (même réseau)
+rsync -avz --progress ~/Documents ~/Projets ~/.ssh lucas@<ip-laptop>:~/
+
+# OU : sauvegarde sur disque externe, puis restauration
+```
+
+Ne **pas** copier `~/.config/git/config`, `~/.ssh/authorized_keys` ni les configs gérées par stow (générés automatiquement). Copier en revanche les clés SSH **privées** (`~/.ssh/id_ed25519`).
 
 ---
 
@@ -145,6 +231,10 @@ nix flake check ~/dotfiles
 
 ```
 dotfiles/
+├── flake.nix              # Flake NixOS (multi-host)
+├── secrets.yaml           # Secrets chiffrés (sops-nix)
+├── hosts/                 # Un dossier par machine (vm, butterfly...)
+├── nixos/                 # Modules NixOS communs
 ├── .zshrc                 # Configuration Zsh
 ├── .config/
 │   ├── kitty/             # Configuration Kitty
@@ -156,8 +246,10 @@ dotfiles/
 │   │   ├── lazy-lock.json
 │   │   ├── lua/config/    # Configs générales
 │   │   └── lua/plugins/   # Configs des plugins
-│   └── oxwm/              # Configuration OXWM
-│       └── config.lua
+│   ├── oxwm/              # Configuration OXWM
+│   │   └── config.lua
+│   └── qtile/             # Configuration Qtile
+│       └── config.py
 ├── st/                    # Simple Terminal (suckless)
 │   ├── config.h           # Configuration personnalisée
 │   ├── config.def.h       # Configuration par défaut
@@ -167,6 +259,7 @@ dotfiles/
 │   ├── config.def.h       # Configuration par défaut
 │   ├── patches/           # Patches appliqués
 │   └── ...
+├── wallpapers/            # Fond d'écran
 └── README.md
 ```
 
@@ -334,7 +427,15 @@ cyan       = #689d69
 ```bash
 cd ~/dotfiles
 git pull
-stow -R zsh nvim oxwm kitty st dmenu
+stow -R zsh nvim oxwm qtile kitty st dmenu
+```
+
+Sur NixOS, reconstruire le système après `git pull` :
+
+```bash
+sudo nixos-rebuild switch --flake ~/dotfiles#vm   # VM
+# ou, sur le laptop :
+sudo nixos-rebuild switch --flake ~/dotfiles#butterfly
 ```
 
 ---
