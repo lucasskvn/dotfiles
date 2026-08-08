@@ -5,13 +5,12 @@
   <img src="https://img.shields.io/badge/Neovim-Yes-green?style=for-the-badge&logo=neovim&logoColor=white" alt="Neovim">
   <img src="https://img.shields.io/badge/OXWM-Yes-blue?style=for-the-badge&logo=linux&logoColor=white" alt="OXWM">
   <img src="https://img.shields.io/badge/Kitty-Yes-green?style=for-the-badge&logo=kitty&logoColor=white" alt="Kitty">
-  <img src="https://img.shields.io/badge/ST-Yes-orange?style=for-the-badge&logo=linux&logoColor=white" alt="ST">
   <img src="https://img.shields.io/badge/Dmenu-Yes-purple?style=for-the-badge&logo=linux&logoColor=white" alt="Dmenu">
 </div>
 
 <br>
 
-Mes dotfiles personnels pour un environnement de développement productif et esthétique. Configuration complète pour **Zsh**, **Neovim**, **OXWM**, **Kitty**, **ST** et **Dmenu**.
+Mes dotfiles personnels pour un environnement de développement productif et esthétique. Configuration complète pour **Zsh**, **Neovim**, **OXWM**, **Kitty** et **Dmenu**.
 
 ---
 
@@ -21,7 +20,6 @@ Mes dotfiles personnels pour un environnement de développement productif et est
 - 📝 **Neovim** — Éditeur configuré avec LSP, Treesitter et une trentaine de plugins
 - 🪟 **OXWM** — Gestionnaire de fenêtres X11 dynamique avec barre d'état intégrée
 - 🖥️ **Kitty** — Terminal GPU-accéléré avec thème Gruvbox
-- 🪄 **ST** — Terminal suckless (simple terminal) patché
 - 🚀 **Dmenu** — Lanceur d'applications suckless avec patch center et fuzzy
 - 🎨 **Thèmes** — Palette cohérente Gruvbox dans tous les outils
 
@@ -48,7 +46,6 @@ stow nvim
 stow oxwm
 stow qtile
 stow kitty
-stow st
 stow dmenu
 stow dunst
 stow rofi
@@ -218,7 +215,7 @@ Le premier switch télécharge nixpkgs et construit tout le système. L'activati
 
 ```bash
 cd ~/dotfiles
-stow zsh nvim oxwm qtile kitty st dmenu dunst rofi fastfetch mpv zathura editorconfig git
+stow zsh nvim oxwm qtile kitty dmenu dunst rofi fastfetch mpv zathura editorconfig git
 ```
 
 #### 7. Migrer les données depuis la VM
@@ -257,10 +254,6 @@ dotfiles/
 │   │   └── config.lua
 │   └── qtile/             # Configuration Qtile
 │       └── config.py
-├── st/                    # Simple Terminal (suckless)
-│   ├── config.h           # Configuration personnalisée
-│   ├── config.def.h       # Configuration par défaut
-│   └── ...
 ├── dmenu/                 # Dynamic Menu (suckless)
 │   ├── config.h           # Configuration personnalisée
 │   ├── config.def.h       # Configuration par défaut
@@ -376,21 +369,6 @@ Terminal GPU-accéléré avec thème Gruvbox dark.
 
 ---
 
-## 🪄 ST (Simple Terminal)
-
-Terminal suckless (st) version 0.9.3, compilé depuis [suckless.org](https://st.suckless.org/).
-
-### Modifications
-
-- Police **JetBrainsMono Nerd Font** avec fallback Noto Color Emoji
-- Scroll avec les touches `Shift+PageUp/PageDown` et la molette
-- Raccourci `Ctrl+O` pour ouvrir l'URL sélectionnée dans Firefox
-- Recherche avec `Ctrl+Shift+F`
-- Copier (`Ctrl+Shift+C`) / Coller (`Ctrl+Shift+V`)
-- Opacité et transparence configurées
-
----
-
 ## 🚀 Dmenu
 
 Lanceur d'applications dynamique depuis [suckless.org](https://tools.suckless.org/dmenu/).
@@ -441,7 +419,7 @@ cyan       = #689d69
 ```bash
 cd ~/dotfiles
 git pull
-stow -R zsh nvim oxwm qtile kitty st dmenu dunst rofi fastfetch mpv zathura editorconfig git
+stow -R zsh nvim oxwm qtile kitty dmenu dunst rofi fastfetch mpv zathura editorconfig git
 ```
 
 Sur NixOS, reconstruire le système après `git pull` :
