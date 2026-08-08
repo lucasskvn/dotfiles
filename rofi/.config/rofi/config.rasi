@@ -1,0 +1,28 @@
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    icon-theme: "Papirus";
+    font: "JetBrainsMono Nerd Font 12";
+    location: 0;
+    width: 55;
+    lines: 10;
+    columns: 1;
+    padding: 12;
+    border-radius: 10;
+    border: 2;
+    border-color: #b8bb26;
+    background-color: #282828;
+    text-color: #ebdbb2;
+    selected-background-color: #3c3836;
+    selected-text-color: #fabd2f;
+    separator-color: #3c3836;
+    normal-background: #282828;
+    normal-foreground: #ebdbb2;
+    urgent-background: #282828;
+    urgent-foreground: #fb4934;
+    active-background: #282828;
+    active-foreground: #83a598;
+    highlight-color: #fb4934;
+    disable-history: false;
+    max-history-size: 30;
+}

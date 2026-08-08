@@ -1,9 +1,12 @@
 { config, lib, pkgs, ... }:
-
+let
+  home = config.users.users.lucas.home;
+in
 {
   programs.git = {
     enable = true;
     config = {
+      core.excludesFile = "${home}/.config/git/ignore";
       init.defaultBranch = "main";
       pull.rebase = true;
       core.pager = "delta";

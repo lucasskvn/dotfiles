@@ -50,6 +50,13 @@ stow qtile
 stow kitty
 stow st
 stow dmenu
+stow dunst
+stow rofi
+stow fastfetch
+stow mpv
+stow zathura
+stow editorconfig
+stow git
 ```
 
 ### Installation manuelle
@@ -211,7 +218,7 @@ Le premier switch télécharge nixpkgs et construit tout le système. L'activati
 
 ```bash
 cd ~/dotfiles
-stow zsh nvim oxwm qtile kitty st dmenu
+stow zsh nvim oxwm qtile kitty st dmenu dunst rofi fastfetch mpv zathura editorconfig git
 ```
 
 #### 7. Migrer les données depuis la VM
@@ -260,6 +267,13 @@ dotfiles/
 │   ├── patches/           # Patches appliqués
 │   └── ...
 ├── wallpapers/            # Fond d'écran
+├── dunst/                 # Notifications (Gruvbox)
+├── rofi/                  # Lanceur (thème Gruvbox)
+├── fastfetch/             # Info système (Gruvbox)
+├── mpv/                   # Config vidéo
+├── zathura/               # Visionneuse PDF (Gruvbox)
+├── editorconfig/          # .editorconfig global (indentation par langage)
+├── git/                   # .gitignore global (~/.config/git/ignore)
 └── README.md
 ```
 
@@ -427,7 +441,7 @@ cyan       = #689d69
 ```bash
 cd ~/dotfiles
 git pull
-stow -R zsh nvim oxwm qtile kitty st dmenu
+stow -R zsh nvim oxwm qtile kitty st dmenu dunst rofi fastfetch mpv zathura editorconfig git
 ```
 
 Sur NixOS, reconstruire le système après `git pull` :

@@ -9,6 +9,7 @@
     autoRepeatInterval = 35;
     displayManager.sessionCommands = ''
       xwallpaper --zoom /home/lucas/dotfiles/wallpapers/wallpaper.jpg
+      dunst &
     '';
   };
 

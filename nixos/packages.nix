@@ -29,5 +29,6 @@
     unzip
     curl
     zed-editor
+    dunst
   ];
 }

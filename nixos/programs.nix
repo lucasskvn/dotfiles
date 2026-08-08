@@ -7,6 +7,12 @@
     enable = true;
     autosuggestions.enable = true;
     syntaxHighlighting.enable = true;
+    shellAliases = {
+      ls = "eza --color=auto --group-directories-first";
+      ll = "eza -la --icons";
+      cat = "bat --paging=never";
+      grep = "rg --no-heading";
+    };
   };
 
   programs.starship = {
