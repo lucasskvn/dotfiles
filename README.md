@@ -67,19 +67,25 @@ cp -r .config/* ~/.config/
 
 ## 🖥️ NixOS
 
-La configuration système est un **flake NixOS** (nixpkgs pinné via `flake.lock`).
+La configuration système est un **flake NixOS** (nixpkgs pinné via `flake.lock`) multi-host.
 
 ### Structure
 
 ```
-flake.nix                 # Entrée du flake (nixpkgs + sops-nix, sortie nixosConfigurations.butterfly)
+flake.nix                 # Entrée du flake (nixpkgs + sops-nix, mkHost)
 secrets.yaml              # Secrets chiffrés (sops) : identité git, clé SSH
-nixos/
+hosts/
+├── vm/                   # VM VirtualBox (actuelle)
+│   ├── configuration.nix # hostName "VM", import hardware
+│   └── hardware-configuration.nix  # Généré par nixos-generate-config
+└── butterfly/            # Laptop (Intel + NVIDIA)
+    ├── configuration.nix # hostName "Butterfly", microcode, NVIDIA, TLP, touchpad
+    └── hardware-configuration.nix  # À générer à l'installation
+nixos/                    # Modules communs partagés par tous les hosts
 ├── configuration.nix     # Point d'entrée : imports + allowUnfree + nix.gc
-├── hardware-configuration.nix  # Généré par nixos-generate-config (machine-specific)
 ├── secrets.nix           # sops-nix : secrets + écriture configs utilisateur à l'activation
 ├── boot.nix              # systemd-boot
-├── networking.nix        # hostname, NetworkManager
+├── networking.nix        # NetworkManager
 ├── locale.nix            # timezone, locale fr_FR.UTF-8
 ├── display.nix           # X11, Qtile, clavier fr, wallpaper
 ├── users.nix             # Utilisateur lucas
@@ -101,18 +107,37 @@ sops secrets.yaml
 age-keygen -o ~/.config/sops/age/keys.txt
 ```
 
+Chaque machine a sa propre clé age. Ajouter une machine comme recipient :
+
+```bash
+age-keygen -y ~/.config/sops/age/keys.txt   # clé publique de la machine
+sops updatekeys secrets.yaml                # puis ajouter la clé publique
+```
+
 ### Build et switch
 
 ```bash
-# Reconstruire le système
+# Sur la VM
+sudo nixos-rebuild switch --flake ~/dotfiles#vm
+
+# Sur le laptop
 sudo nixos-rebuild switch --flake ~/dotfiles#butterfly
 
 # Build sans appliquer (validation)
-nixos-rebuild build --flake ~/dotfiles#butterfly
+nixos-rebuild build --flake ~/dotfiles#vm
 
-# Vérification complète du flake
+# Vérification complète du flake (tous les hosts)
 nix flake check ~/dotfiles
 ```
+
+### Installer un nouveau host (migration VM → laptop)
+
+1. Installer NixOS sur le laptop (UEFI) et cloner le repo dans `~/dotfiles`
+2. Générer le hardware : `nixos-generate-config --root /mnt` puis copier vers `hosts/<nom>/hardware-configuration.nix`
+3. Créer `hosts/<nom>/configuration.nix` (hostname, CPU/GPU, batterie...) — modèle : `hosts/butterfly/`
+4. Ajouter `nom = mkHost "nom";` dans `flake.nix`
+5. Générer la clé age du laptop + `sops updatekeys secrets.yaml` (voir Secrets)
+6. `sudo nixos-rebuild switch --flake ~/dotfiles#<nom>`
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  description = "NixOS configuration for Butterfly";
+  description = "NixOS configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
@@ -7,13 +7,22 @@
     sops-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, sops-nix, ... }: {
-    nixosConfigurations.butterfly = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
+  outputs = { self, nixpkgs, sops-nix, ... }:
+  let
+    system = "x86_64-linux";
+
+    mkHost = name: nixpkgs.lib.nixosSystem {
+      inherit system;
       modules = [
         sops-nix.nixosModules.sops
         ./nixos/configuration.nix
+        ./hosts/${name}/configuration.nix
       ];
+    };
+  in {
+    nixosConfigurations = {
+      butterfly = mkHost "butterfly";
+      vm = mkHost "vm";
     };
   };
 }
