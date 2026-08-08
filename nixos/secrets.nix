@@ -10,15 +10,16 @@ in
     git_name = { };
     git_email = { };
     ssh_authorized_key = { };
-    mail_imap_host = { };
-    mail_imap_user = { };
-    mail_imap_pass = { };
+    # Lisible par lucas : lu à runtime par mbsync (PassCmd) et neomutt
+    mail_imap_host = { owner = "lucas"; mode = "0400"; };
+    mail_imap_user = { owner = "lucas"; mode = "0400"; };
+    mail_imap_pass = { owner = "lucas"; mode = "0400"; };
   };
 
   # Écrit les configs utilisateur depuis les secrets décryptés
   # à l'activation (/run/secrets).
   system.activationScripts.sops-home-config = lib.stringAfter [ "setupSecrets" ] ''
-    mkdir -p ${home}/.config/git ${home}/.ssh ${home}/.config/isync
+    mkdir -p ${home}/.config/git ${home}/.ssh ${home}/.config/isync ${home}/Mail
     cat > ${home}/.config/git/config <<EOF
     [user]
     name = $(cat /run/secrets/git_name)
@@ -30,7 +31,8 @@ in
     Host $(cat /run/secrets/mail_imap_host)
     User $(cat /run/secrets/mail_imap_user)
     PassCmd "cat /run/secrets/mail_imap_pass"
-    SSLType IMAPS
+    TLSType IMAPS
+    AuthMechs LOGIN
     CertificateFile /etc/ssl/certs/ca-certificates.crt
 
     IMAPStore mail-remote
@@ -47,7 +49,8 @@ in
     Create Both
     SyncState *
     EOF
-    chown -R lucas:users ${home}/.config/git ${home}/.ssh ${home}/.config/isync
+    ln -sfn ${home}/.config/isync/mbsyncrc ${home}/.config/isyncrc
+    chown -R lucas:users ${home}/.config/git ${home}/.ssh ${home}/.config/isync ${home}/Mail
     chmod 600 ${home}/.config/git/config ${home}/.ssh/authorized_keys ${home}/.config/isync/mbsyncrc
   '';
 }

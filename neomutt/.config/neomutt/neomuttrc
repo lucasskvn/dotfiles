@@ -2,7 +2,7 @@
 set my_imap_host = "`cat /run/secrets/mail_imap_host`"
 set my_imap_user = "`cat /run/secrets/mail_imap_user`"
 set my_imap_pass = "`cat /run/secrets/mail_imap_pass`"
-set my_smtp_url  = "smtp://`cat /run/secrets/mail_imap_user`@`cat /run/secrets/mail_imap_host`"
+set my_smtp_url  = "smtps://`cat /run/secrets/mail_imap_user`@smtp.gmail.com:465"
 
 set folder = "imaps://$my_imap_host"
 set spoolfile = "+INBOX"
