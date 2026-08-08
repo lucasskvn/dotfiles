@@ -59,6 +59,7 @@ keys = [
     Key([mod], "b", lazy.spawn("firefox")),
     Key([mod], "f", lazy.spawn("pcmanfm")),
     Key([mod], "d", lazy.spawn("rofi -show drun")),
+    Key([mod, "shift"], "l", lazy.spawn("betterlockscreen -l dim"), desc="Lock screen"),
 ]
 
 # Add key bindings to switch VTs in Wayland.
@@ -144,6 +145,7 @@ screens = [
                 # NB Systray is incompatible with Wayland, consider using StatusNotifier instead
                 # widget.StatusNotifier(),
                 widget.Systray(),
+                widget.Battery(format="{char} {percent:2.0%}", update_interval=30),
                 widget.Clock(format="%Y-%m-%d %a %I:%M %p"),
             ],
             24,

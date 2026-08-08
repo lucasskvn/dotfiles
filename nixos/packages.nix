@@ -30,5 +30,13 @@
     curl
     zed-editor
     dunst
+    pavucontrol
+    pamixer
+    playerctl
+    networkmanagerapplet
+    polkit_gnome
+    betterlockscreen
+    shellcheck
+    shfmt
   ];
 }

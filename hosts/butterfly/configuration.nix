@@ -26,6 +26,16 @@
 
   services.tlp.enable = true;
   services.libinput.enable = true;
+  services.fstrim.enable = true;
+  services.upower.enable = true;
+  services.logind.lidSwitch = "suspend";
+  services.redshift = {
+    enable = true;
+    latitude = "48.86";
+    longitude = "2.35";
+  };
+
+  hardware.bluetooth.enable = true;
 
   environment.systemPackages = with pkgs; [
     brightnessctl

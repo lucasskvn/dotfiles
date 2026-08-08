@@ -78,4 +78,9 @@
     enable = true;
     enableSSHSupport = true;
   };
+
+  programs.fzf = {
+    fuzzyCompletion = true;
+    keybindings = true;
+  };
 }

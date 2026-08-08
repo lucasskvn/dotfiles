@@ -1,0 +1,62 @@
+# Compte mail — valeurs depuis les secrets sops (/run/secrets)
+set my_imap_host = "`cat /run/secrets/mail_imap_host`"
+set my_imap_user = "`cat /run/secrets/mail_imap_user`"
+set my_imap_pass = "`cat /run/secrets/mail_imap_pass`"
+set my_smtp_url  = "smtp://`cat /run/secrets/mail_imap_user`@`cat /run/secrets/mail_imap_host`"
+
+set folder = "imaps://$my_imap_host"
+set spoolfile = "+INBOX"
+set mailboxes = "+INBOX"
+set postponed = "+Drafts"
+set record = "+Sent"
+set trash = "+Trash"
+
+set imap_user = $my_imap_user
+set imap_pass = $my_imap_pass
+set smtp_url = $my_smtp_url
+set smtp_pass = $my_imap_pass
+set ssl_force_tls = yes
+set ssl_starttls = yes
+set certificate_file = /etc/ssl/certs/ca-certificates.crt
+
+set editor = "nvim"
+set charset = "utf-8"
+set send_charset = "us-ascii:utf-8"
+set sort = "threads"
+set sort_aux = "last-date-received"
+set reply_regex = "^(([Rr][Ee]?([\[][0-9]+[\]])?[: ]?)*)"
+
+set timeout = 10
+set mail_check = 60
+set pager = "less -R"
+set pager_index_lines = 10
+set pager_context = 3
+set markers = " \n"
+set smart_wrap = yes
+
+# Couleurs Gruvbox
+color list "black" "#282828" default
+color quoted "#928374" default
+color indicator "#b8bb26" "#3c3836"
+color attachment "#fabd2f" default
+color error "#fb4934" default
+color normal "#ebdbb2" default
+color status "#ebdbb2" "#3c3836"
+color tilde "#3c3836" default
+color tree "#928374" default
+color bold "#ebdbb2" default
+color underline "#83a598" default
+color hdrdefault "#83a598" default
+color marker "#fe8019" default
+color search "#fabd2f" "#3c3836"
+color statuscolor "#ebdbb2" "#3c3836"
+color message "#fabd2f" "#3c3836"
+color prompt "#83a598" "#3c3836"
+
+# Raccourcis
+bind p previous-new
+bind n next-new
+bind < previous-thread
+bind > next-thread
+bind S sync-mailbox
+bind x quit

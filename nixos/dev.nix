@@ -30,6 +30,8 @@
     delta
     tmux
     yazi
+    shellcheck
+    shfmt
   ];
 
   programs.direnv = {

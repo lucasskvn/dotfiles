@@ -24,6 +24,7 @@
   nix.settings = {
     auto-optimise-store = true;
     experimental-features = [ "nix-command" "flakes" ];
+    trusted-users = [ "lucas" ];
   };
   nix.gc = {
     automatic = true;
@@ -31,6 +32,10 @@
     options = "--delete-older-than 30d";
   };
   nix.optimise.automatic = true;
+
+  services.earlyoom.enable = true;
+
+  boot.tmp.useTmpfs = true;
 
   system.stateVersion = "26.05";
 }

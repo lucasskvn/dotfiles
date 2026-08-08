@@ -54,6 +54,8 @@ stow mpv
 stow zathura
 stow editorconfig
 stow git
+stow tmux
+stow neomutt
 ```
 
 ### Installation manuelle
@@ -215,7 +217,10 @@ Le premier switch télécharge nixpkgs et construit tout le système. L'activati
 
 ```bash
 cd ~/dotfiles
-stow zsh nvim oxwm qtile kitty dmenu dunst rofi fastfetch mpv zathura editorconfig git
+stow zsh nvim oxwm qtile kitty dmenu dunst rofi fastfetch mpv zathura editorconfig git tmux neomutt
+
+# Initialiser le cache de betterlockscreen (une seule fois, avec le wallpaper du repo)
+betterlockscreen -u ~/dotfiles/wallpapers/lockscreen
 ```
 
 #### 7. Migrer les données depuis la VM
@@ -267,6 +272,8 @@ dotfiles/
 ├── zathura/               # Visionneuse PDF (Gruvbox)
 ├── editorconfig/          # .editorconfig global (indentation par langage)
 ├── git/                   # .gitignore global (~/.config/git/ignore)
+├── tmux/                  # Configuration tmux (Gruvbox)
+├── neomutt/               # Client mail (IMAP via secrets sops)
 └── README.md
 ```
 
@@ -419,7 +426,7 @@ cyan       = #689d69
 ```bash
 cd ~/dotfiles
 git pull
-stow -R zsh nvim oxwm qtile kitty dmenu dunst rofi fastfetch mpv zathura editorconfig git
+stow -R zsh nvim oxwm qtile kitty dmenu dunst rofi fastfetch mpv zathura editorconfig git tmux neomutt
 ```
 
 Sur NixOS, reconstruire le système après `git pull` :
