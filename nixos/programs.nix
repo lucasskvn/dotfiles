@@ -13,6 +13,10 @@
       cat = "bat --paging=never";
       grep = "rg --no-heading";
     };
+    initExtra = ''
+      bindkey '^[[1;5C' forward-word
+      bindkey '^[[1;5D' backward-word
+    '';
   };
 
   programs.starship = {
