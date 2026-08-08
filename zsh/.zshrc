@@ -103,10 +103,7 @@ plugins=(git)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
 bindkey '^ ' autosuggest-accept
 
-# Initialisation de Starship (si tu l'as installé avec pacman -S starship)
-if command -v starship >/dev/null 2>&1; then
-  eval "$(starship init zsh)"
-fi
+# Starship : initialisé par le module NixOS (programs.starship)
 
 export TERM=xterm-256color
 export PATH="$HOME/.local/bin:$PATH"
